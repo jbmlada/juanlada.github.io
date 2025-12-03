@@ -1,0 +1,167 @@
+/* GLOBAL STYLES & FONT */
+:root {
+    --text-color: #000;
+    --bg-color: #fff;
+    --font-size: 14px; /* Base font size */
+    --max-width: 900px;
+    --padding-x: 20px;
+}
+
+body {
+    background: var(--bg-color);
+    color: var(--text-color);
+    /* The key: Use a classic monospace font */
+    font-family: 'Courier New', Courier, monospace;
+    font-size: var(--font-size);
+    line-height: 1.4;
+    padding: 0;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* HEADER STYLES (Fixed to the top) */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 20px var(--padding-x);
+    background-color: var(--bg-color);
+    z-index: 10;
+    border-bottom: 1px solid var(--text-color); /* Separator line */
+}
+
+.site-title {
+    font-weight: bold;
+}
+
+.nav-item {
+    margin-left: 20px;
+}
+
+/* MAIN PROJECT LIST LAYOUT */
+.project-list {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 80px var(--padding-x) 40px; /* Add padding for the fixed header */
+    padding-top: 100px; /* Ensure content starts below the fixed header */
+}
+
+.project-item {
+    display: grid;
+    /* Define the columns:
+       1. Title/Company (flexible width, project name is longest)
+       2. Role (fixed width)
+       3. Year (fixed width)
+       4. Collaborator Count (small fixed width)
+    */
+    grid-template-columns: minmax(150px, 1fr) 150px 70px 30px; 
+    
+    gap: 10px;
+    border-bottom: 1px solid var(--text-color);
+    padding: 10px 0;
+    margin-bottom: 0;
+}
+
+.project-item:last-of-type {
+    border-bottom: none;
+}
+
+/* Custom layout for different elements in the grid */
+.item-title {
+    font-weight: bold;
+}
+
+/* Span the first three columns for Company/Acquisition line */
+.item-company {
+    grid-column: 1 / span 3; 
+    font-style: italic;
+    padding-bottom: 5px; /* Spacing before collaborators */
+}
+
+/* The role and year are simple grid items */
+
+/* Collaborators list spans across all columns to mimic the full-width flow */
+.item-collaborators {
+    grid-column: 1 / -1; /* Start at column 1, end before the last column's end line (span all) */
+    font-size: 0.85em;
+    color: #555; /* Slightly lighter text for collaborators */
+    padding-bottom: 10px;
+}
+
+.item-count {
+    text-align: right;
+    font-weight: bold;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 650px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding-bottom: 10px;
+    }
+
+    nav {
+        margin-top: 10px;
+    }
+    
+    .nav-item {
+        margin-left: 0;
+        margin-right: 15px;
+    }
+
+    .project-list {
+        padding-top: 140px; /* Adjust for taller header */
+    }
+
+    /* Collapse the main project list to a simpler stacked layout */
+    .project-item {
+        display: block; /* Switch to block layout */
+        grid-template-columns: none;
+        padding: 15px 0;
+    }
+    
+    .item-title {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 1.1em;
+    }
+
+    .item-company {
+        grid-column: auto;
+    }
+}
+
+
+/* ABOUT SECTION STYLES */
+.about-section {
+    max-width: var(--max-width);
+    margin: 40px auto;
+    padding: 40px var(--padding-x);
+    border-top: 1px solid var(--text-color);
+}
+
+.about-section h2 {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-top: 0;
+}
+
+.contact-links a {
+    text-decoration: underline;
+}
