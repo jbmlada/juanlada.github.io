@@ -88,7 +88,7 @@ nav ul {
 
 .carousel-track {
     display: flex;
-    padding-left: 50vw; /* Start with offset */
+    padding-left: 100vw; /* Start with offset */
     gap: 4vw;
     align-items: center;
 }
