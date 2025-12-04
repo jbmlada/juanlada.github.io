@@ -3,37 +3,37 @@ document.addEventListener('DOMContentLoaded', () => {
 // --- 1. Horizontal Scroll via Mouse Wheel & Trackpad ---
 	const container = document.getElementById('carousel-container');
 
+    // NEW: Define a uniform speed multiplier to increase scroll responsiveness
+    const SPEED_MULTIPLIER = 3; 
+
     container.addEventListener('wheel', (evt) => {
         // Only run custom JS scrolling logic if screen width is > 768px (desktop/tablet)
         if (window.innerWidth > 768) {
             
-            // Allow the browser to handle scrolling natively on the container for the 1:1 feel,
-            // but prevent default vertical scrolling on the *page* itself.
+            // Prevent default page scrolling
             evt.preventDefault();
             
             // --- Unified 1:1 Scroll Logic ---
-            // Goal: The input delta (deltaX or deltaY) is applied directly to scrollLeft, 
-            // replicating the intuitive, 1:1 trackpad experience for both devices.
-            
             let scrollAmount = 0;
 
             // Use the larger of deltaX or deltaY for the horizontal movement
+            // This ensures both vertical (wheel) and horizontal (trackpad) input scrolls the carousel.
             if (Math.abs(evt.deltaX) > Math.abs(evt.deltaY)) {
                 scrollAmount = evt.deltaX;
             } else {
                 scrollAmount = evt.deltaY;
             }
             
-            // Apply the scroll amount directly. The "smooth" effect is now handled
-            // by the CSS property `scroll-behavior: smooth` on the container.
-            container.scrollLeft += scrollAmount;
+            // FIX: Apply the SPEED_MULTIPLIER to increase the scroll distance per tick
+            container.scrollLeft += scrollAmount * SPEED_MULTIPLIER;
         }
     });
 
     // --- 2. Timeline "Year" Update Logic ---
     const yearDisplay = document.getElementById('year-display');
     const cards = document.querySelectorAll('.project-card');
-    // ... (rest of the IntersectionObserver code is unchanged) ...
+    
+    // Intersection Observer sees which card is currently centered in the view
     const observerOptions = {
         root: container,
         threshold: 0.6 // Trigger when 60% of the card is visible
