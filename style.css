@@ -228,58 +228,53 @@ nav ul {
     gap: 0.2rem; 
 }
 
-/* Custom Download Icon (Mimicking the arrow-over-line design) */
+/* Custom Download Icon */
 .download-icon {
     display: inline-block;
     width: 1.5rem; 
     height: 1.5rem; 
     position: relative;
     cursor: pointer;
-    font-size: 1rem;
-    margin: 0 0 0.5rem 0.5rem; 
+    margin: 0 0 0.5rem 0.5rem; /* Adjusted margin for alignment */
 }
 
+/* Arrowhead */
 .download-icon::before {
-    /* Arrowhead and stem combined via border/shadow */
     content: "";
     position: absolute;
-    top: 0.1rem; 
+    top: 0.2rem; /* Position it a bit lower */
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) rotate(45deg); /* Rotate for the 'V' shape */
     
-    /* Arrowhead (Triangle) */
-    border: 0.3rem solid transparent; 
-    border-top: 0.3rem solid #888; 
+    /* Create the 'V' shape using borders */
+    width: 0.7rem; 
+    height: 0.7rem;
+    border-top: 2px solid #888; /* Top line of 'V' */
+    border-right: 2px solid #888; /* Right line of 'V' */
     
-    /* Stem (using box-shadow for the downward line) */
-    box-shadow: 0 0.4rem 0 0 #888, /* First line segment */
-                0 0.6rem 0 0 #888; /* Second line segment (for thickness) */
-    
-    transition: border-top-color 0.2s, box-shadow 0.2s;
+    transition: border-color 0.2s;
 }
 
+/* Base line / Stem */
 .download-icon::after {
-    /* Horizontal base line */
     content: "";
     position: absolute;
-    bottom: 0.3rem; 
+    bottom: 0.4rem; /* Position the line correctly */
     left: 50%;
     transform: translateX(-50%);
-    width: 1.1rem; /* Wider base line */
-    height: 0.1rem;
+    width: 1.2rem; /* Width of the base line */
+    height: 2px; /* Thickness of the line */
     background-color: #888;
     transition: background-color 0.2s;
 }
 
 /* Hover styles */
 .download-icon:hover::before {
-    border-top-color: #333;
-    box-shadow: 0 0.4rem 0 0 #333, 0 0.6rem 0 0 #333;
+    border-color: #333;
 }
 .download-icon:hover::after {
     background-color: #333;
 }
-
 
 /* --- Mobile/Tablet Responsiveness (Max width 768px) --- */
 @media (max-width: 768px) {

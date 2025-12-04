@@ -8,30 +8,46 @@ document.addEventListener('DOMContentLoaded', () => {
         if (window.innerWidth > 768) {
             evt.preventDefault();
             
-            // --- Device-Specific Speed Control ---
-            const trackpadSpeed = 70; 
-            const mouseWheelSpeed = 10;  
+            // --- Device-Specific Speed Control & Detection ---
+            const trackpadSpeed = 1.5; 
+            const mouseWheelSpeed = 50;  
             let scrollSpeed;
+            let scrollAmount = 0;
 
             // HEURISTIC: Distinguish between Mouse Wheel and Trackpad
-            if (evt.deltaMode === 1 || evt.deltaMode === 2 || (evt.deltaMode === 0 && Math.abs(evt.deltaY) > 30)) {
+            const isMouseWheel = evt.deltaMode === 1 || evt.deltaMode === 2 || (evt.deltaMode === 0 && Math.abs(evt.deltaY) > 30);
+            
+            if (isMouseWheel) {
+                // SCROLL WHEEL (Mouse) Logic: Vertical wheel motion translates to horizontal scroll
                 scrollSpeed = mouseWheelSpeed;
+                
+                // Prioritize horizontal input (deltaX), fall back to vertical (deltaY)
+                if (Math.abs(evt.deltaX) > Math.abs(evt.deltaY)) {
+                    scrollAmount = evt.deltaX;
+                } else {
+                    scrollAmount = evt.deltaY;
+                }
+                
             } else {
+                // TRACKPAD (Heuristic) Logic: Only allow horizontal motion (deltaX)
                 scrollSpeed = trackpadSpeed;
+
+                // CRITICAL FIX: Only use deltaX for trackpads. IGNORE deltaY.
+                if (Math.abs(evt.deltaX) > 0.1) {
+                    scrollAmount = evt.deltaX;
+                } else {
+                    return; // Stop processing if it's vertical trackpad scroll (deltaY)
+                }
             }
 
-            // Combine inputs: Use the larger of deltaX or deltaY
-             let scrollAmount = evt.deltaY;
-            //  if (Math.abs(evt.deltaX) > Math.abs(evt.deltaY)) {
-            //  scrollAmount = evt.deltaX;
-            }
-
-            // Apply the device-specific speed
+            // Apply the device-specific speed and direction
             container.scrollLeft += scrollAmount * scrollSpeed;
         }
+        // Note: Mobile touch scroll is handled naturally by CSS (-webkit-overflow-scrolling: touch)
     });
 
     // --- 2. Timeline "Year" Update Logic ---
+    // ... (rest of the code is unchanged) ...
     const yearDisplay = document.getElementById('year-display');
     const cards = document.querySelectorAll('.project-card');
 
