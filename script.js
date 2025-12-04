@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     evt.preventDefault();
     
     // --- Device-Specific Speed Control ---
-    const trackpadSpeed = 100; // HIGH speed for 1:1 feel (Trackpad)
+    const trackpadSpeed = 80; // HIGH speed for 1:1 feel (Trackpad)
     const mouseWheelSpeed = 20;  // LOWER speed for controlled scrolling (Mouse Wheel)
 
     let scrollSpeed;
