@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
         evt.preventDefault();
         
         // Keeping scrollSpeed high (20) for rapid movement
-        const scrollSpeed = 20; 
+        const scrollSpeed = 10; 
 
         container.scrollBy({
             left: evt.deltaY * scrollSpeed,
