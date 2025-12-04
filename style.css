@@ -89,7 +89,7 @@ nav ul {
 .carousel-track {
     display: flex;
     padding-left: 35vw; /* Start with offset */
-    gap: 4vw;
+    gap: 2vw;
     align-items: center;
 }
 
@@ -131,7 +131,7 @@ nav ul {
 }
 
 .spacer {
-    min-width: 35vw;
+    min-width: 30vw;
 }
 
 /* Modal Styles */
