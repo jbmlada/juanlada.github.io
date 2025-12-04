@@ -200,6 +200,45 @@ nav ul {
     width: 20vw;
 }
 
+/* Styling for the new Resume elements */
+.resume-group {
+    display: flex; /* Arrange Resume text and icon side-by-side */
+    align-items: center;
+    gap: 0.5rem; /* Small space between text and icon */
+}
+
+/* Style for the download icon */
+.download-icon {
+    font-size: 1.5rem; /* Make the icon size consistent with text */
+    margin-bottom: 0 !important; /* Remove bottom margin */
+    cursor: pointer;
+    line-height: 1; /* Align vertically */
+    padding: 0 0.2rem;
+}
+
+.download-icon:hover {
+    color: #333;
+}
+
+/* Make the resume modal nearly full screen */
+.large-modal {
+    max-width: 90vw; /* Wider than the default modal */
+    height: 90vh; /* Taller than the default modal */
+    padding: 1.5rem; /* Slight padding reduction */
+}
+
+/* Ensure the iframe fills the modal content */
+#resume-modal .modal-content {
+    display: flex;
+    flex-direction: column;
+}
+
+#resume-modal iframe {
+    flex-grow: 1;
+    border: none;
+    margin-top: 1rem;
+}
+
 /* --- Mobile/Tablet Responsiveness (Max width 768px) --- */
 @media (max-width: 768px) {
     /* 1. Header Fixes: Stack the elements and make text smaller */
