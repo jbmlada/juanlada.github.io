@@ -3,26 +3,35 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 1. Horizontal Scroll via Mouse Wheel ---
 	const container = document.getElementById('carousel-container');
 
-   	 container.addEventListener('wheel', (evt) => {
-        evt.preventDefault();
-        
-        // Use a high multiplier for speed. 
-        // Adjust this if it's too fast/slow.
-        const scrollSpeed = 20; 
+   container.addEventListener('wheel', (evt) => {
+    evt.preventDefault();
+    
+    // --- Device-Specific Speed Control ---
+    const trackpadSpeed = 100; // HIGH speed for 1:1 feel (Trackpad)
+    const mouseWheelSpeed = 20;  // LOWER speed for controlled scrolling (Mouse Wheel)
 
-        // 1. Check for Vertical Scroll (deltaY): This covers mouse wheels and vertical trackpad gestures.
-        let scrollAmount = evt.deltaY;
+    let scrollSpeed;
 
-        // 2. Check for Horizontal Scroll (deltaX): This covers horizontal trackpad gestures.
-        // If deltaX is present and larger, use it instead.
-        if (Math.abs(evt.deltaX) > Math.abs(evt.deltaY)) {
-            scrollAmount = evt.deltaX;
-        }
+    // HEURISTIC: Distinguish between Mouse Wheel (discrete) and Trackpad (continuous)
+    // 1. deltaMode: Modes 1 (lines) or 2 (pages) usually indicate a discrete step from a mouse wheel.
+    // 2. Magnitude Check: A deltaY over 30 (when deltaMode is 0) is often a fast mouse wheel click.
+    if (evt.deltaMode === 1 || evt.deltaMode === 2 || (evt.deltaMode === 0 && Math.abs(evt.deltaY) > 30)) {
+        // Apply lower speed for controlled steps
+        scrollSpeed = mouseWheelSpeed;
+    } else {
+        // Apply high speed for continuous, low-delta input
+        scrollSpeed = trackpadSpeed;
+    }
 
-        // Direct property assignment for instant, native-feeling movement.
-        // It relies on the trackpad's native momentum for smoothness.
-        container.scrollLeft += scrollAmount * scrollSpeed;
-    });
+    // Combine inputs: Use the larger of deltaX or deltaY to determine total movement
+    let scrollAmount = evt.deltaY;
+    if (Math.abs(evt.deltaX) > Math.abs(evt.deltaY)) {
+        scrollAmount = evt.deltaX;
+    }
+
+    // Apply the device-specific speed
+    container.scrollLeft += scrollAmount * scrollSpeed;
+});
     // --- 2. Timeline "Year" Update Logic ---
     const yearDisplay = document.getElementById('year-display');
     const cards = document.querySelectorAll('.project-card');
