@@ -6,55 +6,37 @@ document.addEventListener('DOMContentLoaded', () => {
     container.addEventListener('wheel', (evt) => {
         // Only run custom JS scrolling logic if screen width is > 768px (desktop/tablet)
         if (window.innerWidth > 768) {
+            
+            // Allow the browser to handle scrolling natively on the container for the 1:1 feel,
+            // but prevent default vertical scrolling on the *page* itself.
             evt.preventDefault();
             
-            // --- Device-Specific Speed Control & Detection ---
-            const trackpadSpeed = 80; 
-            const mouseWheelSpeed = 3;  
-            let scrollSpeed;
+            // --- Unified 1:1 Scroll Logic ---
+            // Goal: The input delta (deltaX or deltaY) is applied directly to scrollLeft, 
+            // replicating the intuitive, 1:1 trackpad experience for both devices.
+            
             let scrollAmount = 0;
 
-            // HEURISTIC: Distinguish between Mouse Wheel and Trackpad
-            const isMouseWheel = evt.deltaMode === 1 || evt.deltaMode === 2 || (evt.deltaMode === 0 && Math.abs(evt.deltaY) > 30);
-            
-            if (isMouseWheel) {
-                // SCROLL WHEEL (Mouse) Logic: Vertical wheel motion translates to horizontal scroll
-                scrollSpeed = mouseWheelSpeed;
-                
-                // Prioritize horizontal input (deltaX), fall back to vertical (deltaY)
-                if (Math.abs(evt.deltaY) > Math.abs(evt.deltaX)) {
-                    scrollAmount = evt.deltaY;
-                } else {
-                    scrollAmount = evt.deltaX;
-                }
-                
+            // Use the larger of deltaX or deltaY for the horizontal movement
+            if (Math.abs(evt.deltaX) > Math.abs(evt.deltaY)) {
+                scrollAmount = evt.deltaX;
             } else {
-                // TRACKPAD (Heuristic) Logic: Only allow horizontal motion (deltaX)
-                scrollSpeed = trackpadSpeed;
-
-                // CRITICAL FIX: Only use deltaX for trackpads. IGNORE deltaY.
-                if (Math.abs(evt.deltaX) > 0.1) {
-                    scrollAmount = evt.deltaX;
-                } else {
-                    scrollAmount = 0; // Stop processing if it's vertical trackpad scroll (deltaY)
-                }
+                scrollAmount = evt.deltaY;
             }
-
-            // Apply the device-specific speed and direction
-            container.scrollLeft += scrollAmount * scrollSpeed;
+            
+            // Apply the scroll amount directly. The "smooth" effect is now handled
+            // by the CSS property `scroll-behavior: smooth` on the container.
+            container.scrollLeft += scrollAmount;
         }
-        // Note: Mobile touch scroll is handled naturally by CSS (-webkit-overflow-scrolling: touch)
     });
 
     // --- 2. Timeline "Year" Update Logic ---
-    // ... (rest of the code is unchanged) ...
     const yearDisplay = document.getElementById('year-display');
     const cards = document.querySelectorAll('.project-card');
-
-    // Intersection Observer sees which card is currently centered in the view
+    // ... (rest of the IntersectionObserver code is unchanged) ...
     const observerOptions = {
         root: container,
-        threshold: 0.9 // Trigger when 60% of the card is visible
+        threshold: 0.6 // Trigger when 60% of the card is visible
     };
 
     const observer = new IntersectionObserver((entries) => {
