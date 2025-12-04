@@ -6,12 +6,22 @@ document.addEventListener('DOMContentLoaded', () => {
    	 container.addEventListener('wheel', (evt) => {
         evt.preventDefault();
         
-        // Keeping scrollSpeed high (20) for rapid movement
-        const scrollSpeed = 10; 
+        // Use a high multiplier for speed. 
+        // Adjust this if it's too fast/slow.
+        const scrollSpeed = 20; 
 
-// ALTERNATIVE FIX: Direct property assignment is faster than scrollBy.
-        // This relies on the trackpad's native momentum for smoothness.
-        container.scrollLeft += evt.deltaY * scrollSpeed;
+        // 1. Check for Vertical Scroll (deltaY): This covers mouse wheels and vertical trackpad gestures.
+        let scrollAmount = evt.deltaY;
+
+        // 2. Check for Horizontal Scroll (deltaX): This covers horizontal trackpad gestures.
+        // If deltaX is present and larger, use it instead.
+        if (Math.abs(evt.deltaX) > Math.abs(evt.deltaY)) {
+            scrollAmount = evt.deltaX;
+        }
+
+        // Direct property assignment for instant, native-feeling movement.
+        // It relies on the trackpad's native momentum for smoothness.
+        container.scrollLeft += scrollAmount * scrollSpeed;
     });
     // --- 2. Timeline "Year" Update Logic ---
     const yearDisplay = document.getElementById('year-display');
