@@ -9,8 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
             evt.preventDefault();
             
             // --- Device-Specific Speed Control ---
-            const trackpadSpeed = 80; 
-            const mouseWheelSpeed = 2;  
+            const trackpadSpeed = 70; 
+            const mouseWheelSpeed = 10;  
             let scrollSpeed;
 
             // HEURISTIC: Distinguish between Mouse Wheel and Trackpad
@@ -21,9 +21,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Combine inputs: Use the larger of deltaX or deltaY
-            let scrollAmount = evt.deltaY;
-            if (Math.abs(evt.deltaX) > Math.abs(evt.deltaY)) {
-                scrollAmount = evt.deltaX;
+             let scrollAmount = evt.deltaY;
+            //  if (Math.abs(evt.deltaX) > Math.abs(evt.deltaY)) {
+            //  scrollAmount = evt.deltaX;
             }
 
             // Apply the device-specific speed
