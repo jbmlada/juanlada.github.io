@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	const container = document.getElementById('carousel-container');
 
     // NEW: Define a uniform speed multiplier to increase scroll responsiveness
-    const SPEED_MULTIPLIER = 3; 
+    const SPEED_MULTIPLIER = 30; 
 
     container.addEventListener('wheel', (evt) => {
         // Only run custom JS scrolling logic if screen width is > 768px (desktop/tablet)
