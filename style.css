@@ -103,7 +103,7 @@ nav ul {
 .image-box {
     width: 30vw; /* Adjust width based on preference */
     height: 70vh;
-    border: 2px dotted #aaa; /* The dotted look */
+    border: 2px dotted #fff; /* The dotted look */
     display: flex;
     justify-content: center;
     align-items: center;
