@@ -88,7 +88,7 @@ nav ul {
 
 .carousel-track {
     display: flex;
-    padding-left: 35vw; /* Start with offset */
+    padding-left: 40vw; /* Start with offset */
     gap: 2vw;
     align-items: center;
 }
@@ -102,7 +102,7 @@ nav ul {
 
 .image-box {
     width: 30vw; /* Adjust width based on preference */
-    height: 50vh;
+    height: 70vh;
     border: 2px dotted #aaa; /* The dotted look */
     display: flex;
     justify-content: center;
