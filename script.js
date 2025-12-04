@@ -113,61 +113,57 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target === resumeModal) resumeModal.classList.add('hidden');
     });
 
-    // --- 4. Project Click Logic (Global Function) ---
-    window.openProject = function(element) {
-        const title = element.getAttribute('data-title');
-        const desc = element.getAttribute('data-desc');
-        const imgSrc = element.getAttribute('data-img');
+// --- 4. Project Click Logic (Global Function) ---
+window.openProject = function(element) {
+    const title = element.getAttribute('data-title');
+    const rawDesc = element.getAttribute('data-desc'); // Get raw text
+    const imgSrc = element.getAttribute('data-img');
 
-// 1. Process the raw description string:
-    let formattedDesc = desc;
+    // Split the raw string by newline character to process line by line
+    const lines = rawDesc.split('\n');
+    let finalHtml = '';
+    let isListOpen = false;
 
-    // A. Replace '\n' with HTML line break tags (for basic breaks)
-    formattedDesc = formattedDesc.replace(/\n/g, '<br>');
-
-    // B. Detect list items (lines starting with '- ') and wrap them in a <ul>
-    const lines = formattedDesc.split('<br>');
-    let isList = false;
-    let listHtml = '';
-    
-    // Iterate through lines to build the new formatted content
-    const finalContent = lines.map(line => {
-        // Trim leading/trailing whitespace
+    lines.forEach(line => {
         const trimmedLine = line.trim();
-        
-        if (trimmedLine.startsWith('- ')) {
-            // Start a new list if one hasn't started
-            if (!isList) {
-                isList = true;
-                return '<ul><li>' + trimmedLine.substring(2) + '</li>';
-            }
-            // Continue the existing list
-            return '<li>' + trimmedLine.substring(2) + '</li>';
-        } else {
-            // If we are ending a list, close the <ul> tag
-            if (isList) {
-                isList = false;
-                return '</ul>' + line; // Close the list and return the current line
-            }
-            // If it's a regular line outside a list
-            return line;
-        }
-    }).join('');
 
-    // If the list was the last thing, close the tag
-    if (isList) {
-        listHtml += '</ul>';
+        // Check if the line starts with a hyphen (for list item)
+        if (trimmedLine.startsWith('-')) {
+            // It's a list item
+            if (!isListOpen) {
+                // Start the list if one isn't open
+                finalHtml += '<ul>';
+                isListOpen = true;
+            }
+            // Add the list item (remove the hyphen and any leading space)
+            const listItemContent = trimmedLine.substring(trimmedLine.indexOf('-') + 1).trim();
+            finalHtml += `<li>${listItemContent}</li>`;
+        } else {
+            // It's a paragraph or a blank line
+            if (isListOpen) {
+                // If a list was open, close it before inserting paragraph content
+                finalHtml += '</ul>';
+                isListOpen = false;
+            }
+
+            // Treat non-empty lines as paragraphs
+            if (trimmedLine.length > 0) {
+                finalHtml += `<p>${trimmedLine}</p>`;
+            }
+            // Blank lines (trimmedLine.length === 0) are ignored.
+        }
+    });
+
+    // Close any open list at the very end
+    if (isListOpen) {
+        finalHtml += '</ul>';
     }
 
-    // Combine any remaining HTML
-    const finalFormattedContent = finalContent + listHtml;
-
-
-    // 2. Insert content into the modal using innerHTML (safe since the content is sanitized text)
+    // Insert content into the modal
     document.getElementById('modal-title').innerText = title;
     
-    // CRITICAL CHANGE: Use innerHTML to render the converted tags!
-    document.getElementById('modal-desc').innerHTML = finalFormattedContent;
+    // CRITICAL: Use innerHTML to render the converted tags!
+    document.getElementById('modal-desc').innerHTML = finalHtml;
     
     document.getElementById('modal-img').src = imgSrc;
 
