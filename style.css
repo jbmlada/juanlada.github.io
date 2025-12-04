@@ -228,54 +228,26 @@ nav ul {
     gap: 0.2rem; 
 }
 
-/* Custom Download Icon */
+/* Custom Download Icon (Reworked to use Material Icons) */
 .download-icon {
-    display: inline-block;
-    width: 1.5rem; 
-    height: 1.5rem; 
-    position: relative;
-    cursor: pointer;
-    margin: 0 0 0.5rem 0.5rem; /* Adjusted margin for alignment */
-}
+    /* Base styles from the original link (a) */
+    text-decoration: none;
+    color: #888;
+    font-size: 1.5rem; 
+    display: block;
+    margin-bottom: 0.5rem; /* Match existing 'a' margin */
+    transition: color 0.2s;
 
-/* Arrowhead */
-.download-icon::before {
-    content: "";
-    position: absolute;
-    top: 0.2rem; /* Position it a bit lower */
-    left: 50%;
-    transform: translateX(-50%) rotate(45deg); /* Rotate for the 'V' shape */
+    /* Specific adjustments for icon positioning */
+    margin-left: 0.2rem; 
     
-    /* Create the 'V' shape using borders */
-    width: 0.7rem; 
-    height: 0.7rem;
-    border-top: 2px solid #888; /* Top line of 'V' */
-    border-right: 2px solid #888; /* Right line of 'V' */
-    
-    transition: border-color 0.2s;
+    /* Ensure the icon is a standard size and weight */
+    font-weight: 400; 
 }
 
-/* Base line / Stem */
-.download-icon::after {
-    content: "";
-    position: absolute;
-    bottom: 0.4rem; /* Position the line correctly */
-    left: 50%;
-    transform: translateX(-50%);
-    width: 1.2rem; /* Width of the base line */
-    height: 2px; /* Thickness of the line */
-    background-color: #888;
-    transition: background-color 0.2s;
+.download-icon:hover {
+    color: #333; /* Match existing hover color */
 }
-
-/* Hover styles */
-.download-icon:hover::before {
-    border-color: #333;
-}
-.download-icon:hover::after {
-    background-color: #333;
-}
-
 /* --- Mobile/Tablet Responsiveness (Max width 768px) --- */
 @media (max-width: 768px) {
     /* 1. Header Fixes: Stack the elements and make text smaller */
