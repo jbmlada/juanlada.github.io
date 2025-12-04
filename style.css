@@ -79,7 +79,6 @@ nav ul {
     /* Hide scrollbar */
     scrollbar-width: none; 
     -ms-overflow-style: none;
-    scroll-behavior: smooth;
 }
 
 #carousel-container::-webkit-scrollbar { 
