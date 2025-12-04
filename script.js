@@ -1,17 +1,20 @@
 document.addEventListener('DOMContentLoaded', () => {
     
     // --- 1. Horizontal Scroll via Mouse Wheel ---
-    const container = document.getElementById('carousel-container');
+	const container = document.getElementById('carousel-container');
 
-    container.addEventListener('wheel', (evt) => {
+   	 container.addEventListener('wheel', (evt) => {
         evt.preventDefault();
-        // Convert vertical scroll (deltaY) to horizontal scroll (left)
+        
+        // Adjust this number to control speed 
+        // (Higher = Faster. Try 5, 8, or 10)
+        const scrollSpeed = 6; 
+
         container.scrollBy({
-            left: evt.deltaY * 3, // Multiplier for speed
-            behavior: 'smooth'
+            left: evt.deltaY * scrollSpeed,
+            behavior: 'auto' // CHANGED: 'auto' makes it feel instant and responsive
         });
     });
-
     // --- 2. Timeline "Year" Update Logic ---
     const yearDisplay = document.getElementById('year-display');
     const cards = document.querySelectorAll('.project-card');
