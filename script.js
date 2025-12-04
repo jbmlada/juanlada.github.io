@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Adjust this number to control speed 
         // (Higher = Faster. Try 5, 8, or 10)
-        const scrollSpeed = 50; 
+        const scrollSpeed = 25; 
 
         container.scrollBy({
             left: evt.deltaY * scrollSpeed,
