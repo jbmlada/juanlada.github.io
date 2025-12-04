@@ -3,29 +3,32 @@ document.addEventListener('DOMContentLoaded', () => {
 // --- 1. Horizontal Scroll via Mouse Wheel & Trackpad ---
 	const container = document.getElementById('carousel-container');
 
-    // NEW: Define a uniform speed multiplier to increase scroll responsiveness
-    const SPEED_MULTIPLIER = 1; 
-
+    // UNCHANGED: Original scrolling logic
     container.addEventListener('wheel', (evt) => {
         // Only run custom JS scrolling logic if screen width is > 768px (desktop/tablet)
-        if (window.innerWidth > 1) {
-            
-            // Prevent default page scrolling
+        if (window.innerWidth > 768) {
             evt.preventDefault();
             
-            // --- Unified 1:1 Scroll Logic ---
-            let scrollAmount = 0;
+            // --- Device-Specific Speed Control ---
+            const trackpadSpeed = 70; 
+            const mouseWheelSpeed = 10;  
+            let scrollSpeed;
 
-            // Use the larger of deltaX or deltaY for the horizontal movement
-            // This ensures both vertical (wheel) and horizontal (trackpad) input scrolls the carousel.
-            if (Math.abs(evt.deltaX) > Math.abs(evt.deltaY)) {
-                scrollAmount = evt.deltaX;
+            // HEURISTIC: Distinguish between Mouse Wheel and Trackpad
+            if (evt.deltaMode === 1 || evt.deltaMode === 2 || (evt.deltaMode === 0 && Math.abs(evt.deltaY) > 30)) {
+                scrollSpeed = mouseWheelSpeed;
             } else {
-                scrollAmount = evt.deltaY;
+                scrollSpeed = trackpadSpeed;
             }
-            
-            // FIX: Apply the SPEED_MULTIPLIER to increase the scroll distance per tick
-            container.scrollLeft += scrollAmount * SPEED_MULTIPLIER;
+
+            // Combine inputs: Use the larger of deltaX or deltaY
+             let scrollAmount = evt.deltaY;
+              if (Math.abs(evt.deltaX) > Math.abs(evt.deltaY)) {
+              scrollAmount = evt.deltaX;
+            }
+
+            // Apply the device-specific speed
+            container.scrollLeft += scrollAmount * scrollSpeed;
         }
     });
 
@@ -113,60 +116,60 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target === resumeModal) resumeModal.classList.add('hidden');
     });
 
-// --- 4. Project Click Logic (Global Function) ---
-window.openProject = function(element) {
-    const title = element.getAttribute('data-title');
-    const rawDesc = element.getAttribute('data-desc'); // Get raw text
-    const imgSrc = element.getAttribute('data-img');
+    // --- 4. Project Click Logic (Global Function) ---
+    window.openProject = function(element) {
+        const title = element.getAttribute('data-title');
+        const rawDesc = element.getAttribute('data-desc'); // Get raw text
+        const imgSrc = element.getAttribute('data-img');
 
-    // Split the raw string by newline character to process line by line
-    const lines = rawDesc.split('\n');
-    let finalHtml = '';
-    let isListOpen = false;
+        // Split the raw string by newline character to process line by line
+        const lines = rawDesc.split('\n');
+        let finalHtml = '';
+        let isListOpen = false;
 
-    lines.forEach(line => {
-        const trimmedLine = line.trim();
+        lines.forEach(line => {
+            const trimmedLine = line.trim();
 
-        // Check if the line starts with a hyphen (for list item)
-        if (trimmedLine.startsWith('-')) {
-            // It's a list item
-            if (!isListOpen) {
-                // Start the list if one isn't open
-                finalHtml += '<ul>';
-                isListOpen = true;
+            // 1. Check for a list item (must start with hyphen followed by a space)
+            if (trimmedLine.startsWith('- ')) {
+                if (!isListOpen) {
+                    // Start the list if one isn't open
+                    finalHtml += '<ul>';
+                    isListOpen = true;
+                }
+                // Add the list item (remove the '- ')
+                const listItemContent = trimmedLine.substring(2).trim();
+                finalHtml += `<li>${listItemContent}</li>`;
+
+            // 2. Otherwise, treat as a paragraph or a blank line
+            } else {
+                if (isListOpen) {
+                    // If a list was open, close it before inserting paragraph content
+                    finalHtml += '</ul>';
+                    isListOpen = false;
+                }
+
+                // Treat non-empty lines as paragraphs
+                if (trimmedLine.length > 0) {
+                    finalHtml += `<p>${trimmedLine}</p>`;
+                }
+                // Blank lines (trimmedLine.length === 0) are ignored.
             }
-            // Add the list item (remove the hyphen and any leading space)
-            const listItemContent = trimmedLine.substring(trimmedLine.indexOf('-') + 1).trim();
-            finalHtml += `<li>${listItemContent}</li>`;
-        } else {
-            // It's a paragraph or a blank line
-            if (isListOpen) {
-                // If a list was open, close it before inserting paragraph content
-                finalHtml += '</ul>';
-                isListOpen = false;
-            }
+        });
 
-            // Treat non-empty lines as paragraphs
-            if (trimmedLine.length > 0) {
-                finalHtml += `<p>${trimmedLine}</p>`;
-            }
-            // Blank lines (trimmedLine.length === 0) are ignored.
+        // 3. Close any open list at the very end
+        if (isListOpen) {
+            finalHtml += '</ul>';
         }
-    });
 
-    // Close any open list at the very end
-    if (isListOpen) {
-        finalHtml += '</ul>';
-    }
+        // 4. Insert content into the modal
+        document.getElementById('modal-title').innerText = title;
+        
+        // CRITICAL: Use innerHTML to render the converted tags!
+        document.getElementById('modal-desc').innerHTML = finalHtml;
+        
+        document.getElementById('modal-img').src = imgSrc;
 
-    // Insert content into the modal
-    document.getElementById('modal-title').innerText = title;
-    
-    // CRITICAL: Use innerHTML to render the converted tags!
-    document.getElementById('modal-desc').innerHTML = finalHtml;
-    
-    document.getElementById('modal-img').src = imgSrc;
-
-    projectModal.classList.remove('hidden');
-};
+        projectModal.classList.remove('hidden');
+    };
 });
