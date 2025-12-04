@@ -119,10 +119,58 @@ document.addEventListener('DOMContentLoaded', () => {
         const desc = element.getAttribute('data-desc');
         const imgSrc = element.getAttribute('data-img');
 
-        document.getElementById('modal-title').innerText = title;
-        document.getElementById('modal-desc').innerText = desc;
-        document.getElementById('modal-img').src = imgSrc;
+// 1. Process the raw description string:
+    let formattedDesc = desc;
 
-        projectModal.classList.remove('hidden');
-    };
+    // A. Replace '\n' with HTML line break tags (for basic breaks)
+    formattedDesc = formattedDesc.replace(/\n/g, '<br>');
+
+    // B. Detect list items (lines starting with '- ') and wrap them in a <ul>
+    const lines = formattedDesc.split('<br>');
+    let isList = false;
+    let listHtml = '';
+    
+    // Iterate through lines to build the new formatted content
+    const finalContent = lines.map(line => {
+        // Trim leading/trailing whitespace
+        const trimmedLine = line.trim();
+        
+        if (trimmedLine.startsWith('- ')) {
+            // Start a new list if one hasn't started
+            if (!isList) {
+                isList = true;
+                return '<ul><li>' + trimmedLine.substring(2) + '</li>';
+            }
+            // Continue the existing list
+            return '<li>' + trimmedLine.substring(2) + '</li>';
+        } else {
+            // If we are ending a list, close the <ul> tag
+            if (isList) {
+                isList = false;
+                return '</ul>' + line; // Close the list and return the current line
+            }
+            // If it's a regular line outside a list
+            return line;
+        }
+    }).join('');
+
+    // If the list was the last thing, close the tag
+    if (isList) {
+        listHtml += '</ul>';
+    }
+
+    // Combine any remaining HTML
+    const finalFormattedContent = finalContent + listHtml;
+
+
+    // 2. Insert content into the modal using innerHTML (safe since the content is sanitized text)
+    document.getElementById('modal-title').innerText = title;
+    
+    // CRITICAL CHANGE: Use innerHTML to render the converted tags!
+    document.getElementById('modal-desc').innerHTML = finalFormattedContent;
+    
+    document.getElementById('modal-img').src = imgSrc;
+
+    projectModal.classList.remove('hidden');
+};
 });
