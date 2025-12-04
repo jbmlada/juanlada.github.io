@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (Math.abs(evt.deltaX) > 0.1) {
                     scrollAmount = evt.deltaX;
                 } else {
-                    return; // Stop processing if it's vertical trackpad scroll (deltaY)
+                    scrollAmount = 0; // Stop processing if it's vertical trackpad scroll (deltaY)
                 }
             }
 
