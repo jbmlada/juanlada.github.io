@@ -29,31 +29,52 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- 2. Timeline "Year" Update Logic ---
+// --- 2. Timeline "Year" Update Logic (Revised for Center Alignment) ---
     const yearDisplay = document.getElementById('year-display');
     const cards = document.querySelectorAll('.project-card');
-    
-    // Intersection Observer sees which card is currently centered in the view
-    const observerOptions = {
-        root: container,
-        threshold: 0.6 // Trigger when 60% of the card is visible
-    };
 
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const year = entry.target.getAttribute('data-year');
+    function updateYearDisplay() {
+        const container = document.getElementById('carousel-container');
+        // Calculate the horizontal center position of the visible container area
+        const containerCenter = container.scrollLeft + container.clientWidth / 2;
+        
+        let closestCard = null;
+        let minDifference = Infinity;
+
+        cards.forEach(card => {
+            // Calculate the card's midpoint relative to the carousel start (0)
+            const cardMidpoint = card.offsetLeft + card.offsetWidth / 2;
+            
+            // Calculate the absolute distance from the card midpoint to the container center
+            const difference = Math.abs(cardMidpoint - containerCenter);
+
+            if (difference < minDifference) {
+                minDifference = difference;
+                closestCard = card;
+            }
+        });
+
+        if (closestCard) {
+            const newYear = closestCard.getAttribute('data-year');
+            const currentYear = yearDisplay.textContent;
+
+            // Only update if the year has actually changed
+            if (newYear !== currentYear) {
                 yearDisplay.style.opacity = 0;
                 setTimeout(() => {
-                    yearDisplay.textContent = year;
+                    yearDisplay.textContent = newYear;
                     yearDisplay.style.opacity = 1;
                 }, 200);
             }
-        });
-    }, observerOptions);
+        }
+    }
 
-    cards.forEach(card => observer.observe(card));
+    // Attach the new logic to the scroll event of the container
+    container.addEventListener('scroll', updateYearDisplay);
 
+    // Initial update on page load (required)
+    // Use a slight delay to ensure all CSS/layout is rendered before calculation
+    setTimeout(updateYearDisplay, 50);
     // --- 3. Modal Logic (About, Projects, & RESUME) ---
     
     // Elements
