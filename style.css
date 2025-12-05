@@ -168,9 +168,9 @@ nav ul {
 
 /* --- Adjusting Project Modal Specific Width --- */
 #project-modal .modal-content {
-    max-width: 80vw; 
+    max-width: 150vw; 
     width: 1200px; 
-    max-height: 90vh; 
+    max-height: 80vh; 
     overflow-y: auto; 
 }
 
@@ -202,7 +202,7 @@ nav ul {
     height: auto;
 }
 
-..project-detail-layout img {
+.project-detail-layout img {
     width: 100%;
     height: auto;
 }
