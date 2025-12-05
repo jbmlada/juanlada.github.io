@@ -166,6 +166,14 @@ nav ul {
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
+/* --- Adjusting Project Modal Specific Width --- */
+#project-modal .modal-content {
+    max-width: 80vw; 
+    width: 1200px; 
+    max-height: 90vh; 
+    overflow-y: auto; 
+}
+
 .close-btn {
     position: absolute;
     top: 1rem;
@@ -175,14 +183,26 @@ nav ul {
 }
 
 /* About Grid */
-.about-grid, .project-detail-layout {
+.about-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
     align-items: center;
 }
 
-.about-grid img, .project-detail-layout img {
+.project-detail-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: center;
+}
+
+.about-grid img {
+    width: 100%;
+    height: auto;
+}
+
+..project-detail-layout img {
     width: 100%;
     height: auto;
 }
